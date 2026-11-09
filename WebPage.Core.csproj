@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <RootNamespace>WebPage</RootNamespace>
+
+    <!-- Precompile views into the DLL -->
+    <RazorCompileOnBuild>true</RazorCompileOnBuild>
+    <RazorCompileOnPublish>true</RazorCompileOnPublish>
+
+    <!-- Embed static files into the DLL -->
+    <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="MailKit" Version="4.15.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.12" />
+  </ItemGroup>
+
+  <!-- Embed wwwroot files as resources for secure serving from DLL -->
+  <PropertyGroup>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\**\*" />
+  </ItemGroup>
+
+  <!-- Feature controllers - excluded from Core compilation, included selectively by server projects -->
+  <ItemGroup>
+    <Compile Remove="Features\**\*.cs" />
+    <None Include="Features\**\*.cs" />
+  </ItemGroup>
+
+  <!-- DataFiles as embedded resources -->
+  <ItemGroup>
+    <EmbeddedResource Include="DataFiles\**\*.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="MutilResources\Mutil.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Mutil.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="MutilResources\Mutil.resx">
+      <CustomToolNamespace>Mutil</CustomToolNamespace>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Mutil.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\DepositSheets.gs" LogicalName="DepositSheetsTemplate" />
+  </ItemGroup>
+</Project>
